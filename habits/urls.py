@@ -10,7 +10,8 @@ app_name = HabitsConfig.name
 
 urlpatterns = [
     path('habits/create/', HabitsCreateAPIView.as_view(), name='habits_create'),
-    path('habits/', HabitsListAPIView.as_view(), name='habits_list'),
+    path('habits/list', HabitsListAPIView.as_view(), name='habits_list'),
+    path('habits/public', HabitsListAPIView.as_view(), name='habits_public_list'),
     path('habits/<int:pk>/', HabitsRetrieveAPIView.as_view(), name='habits_get'),
     path('habits/update/<int:pk>/', HabitsUpdateAPIView.as_view(), name='habits_update'),
     path('habits/delete/<int:pk>/', HabitsDestroyAPIView.as_view(), name='habits_delete'),
