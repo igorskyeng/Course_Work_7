@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db import models
@@ -28,25 +28,24 @@ class Habits(models.Model):
 
     class PeriodHabits(models.TextChoices):
         once_a_day = "Раз в день", "Раз в день"
-        on_weekends = "По выходным", "По выходным"
         once_a_week = "Раз в неделю", "Раз в неделю"
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              verbose_name='Пользователь', **NULLABLE)
     place = models.CharField(max_length=150, verbose_name='Место привычки')
-    time = models.DateTimeField(default=datetime.now(), verbose_name='Время привычки')
+    time = models.DateTimeField(default=datetime.now(), verbose_name='Время привычки', **NULLABLE)
     action = models.CharField(max_length=150, verbose_name='Действие привычки')
-    sign_pleasant_habit = models.BooleanField(default=True, verbose_name='Признак приятной привычки')
+    sign_pleasant_habit = models.BooleanField(default=False, verbose_name='Признак приятной привычки')
     related_habit = models.ForeignKey(PleasantHabit, on_delete=models.CASCADE,
                                       verbose_name='Связанная привычка', **NULLABLE)
     frequency = models.CharField(max_length=50, default=PeriodHabits.once_a_day,
                                  choices=PeriodHabits, verbose_name='Периодичность рассылки')
     reward = models.CharField(max_length=150, verbose_name='Вознаграждение')
-    time_to_complete = models.TimeField(default=2, verbose_name='Время на выполнение')
-    publication_sign = models.BooleanField(default=True, verbose_name='Публикация')
+    time_to_complete = models.DurationField(default=timedelta(minutes=2), verbose_name='Время на выполнение')
+    publication_sign = models.BooleanField(default=False, verbose_name='Публикация')
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
     class Meta:
         verbose_name = 'Привычка'
